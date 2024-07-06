@@ -500,13 +500,27 @@ class OfxParser(object):
         except ValueError:
             if ofxDateTime[:8] == "00000000":
                 return None
+            
+            date_f = None
+            
+            try:
+                if not cls.custom_date_format:
+                    date_f = datetime.datetime.strptime(
+                        ofxDateTime[:8], '%Y%m%d') - timeZoneOffset + msec
+                else:
+                    date_f = datetime.datetime.strptime(
+                        ofxDateTime[:8], cls.custom_date_format) - timeZoneOffset + msec
+            except:
+                pass
 
-            if not cls.custom_date_format:
-                return datetime.datetime.strptime(
-                    ofxDateTime[:8], '%Y%m%d') - timeZoneOffset + msec
-            else:
-                return datetime.datetime.strptime(
-                    ofxDateTime[:8], cls.custom_date_format) - timeZoneOffset + msec
+            if not date_f:
+                try:
+                    date_f = datetime.datetime \
+                        .strptime(ofxDateTime[:8], '%Y%m%d')
+                except:
+                    pass
+            
+            return date_f
 
     @classmethod
     def parseAcctinfors(cls, acctinfors_ofx, ofx):
