@@ -4,7 +4,7 @@ from .ofxparse import (OfxParser, OfxParserException, AccountType, Account,
                        Statement, Transaction)
 from .ofxprinter import OfxPrinter
 
-__version__ = '0.21x'
+__version__ = '0.30'
 __all__ = [
     'OfxParser',
     'OfxParserException',
