@@ -119,9 +119,13 @@ class OfxFile(object):
             # decode the body as ascii as well
             self.fh = codecs.lookup('ascii').streamreader(self.fh)
             return
-
+        
         if enc_type == "USASCII":
-            cp = ascii_headers.get("CHARSET", "1252")
+            default_charset = "1252"
+            cp = ascii_headers.get("CHARSET", None) or default_charset
+            if cp and cp.upper().strip() == "NONE":
+                cp = default_charset
+
             if cp == "8859-1":
                 encoding = "iso-8859-1"
             else:
